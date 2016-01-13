@@ -17,6 +17,13 @@ class PostsController < ApplicationController
 		end
 	end
 
+	def show
+		@post = Post.find_by_id(params[:id])
+		if @post.blank?
+			render text: "Not Found :(", status: :not_found
+		end
+	end
+
 	def post_params
 		params.require(:post).permit(:message)
 	end

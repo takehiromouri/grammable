@@ -44,4 +44,16 @@ RSpec.describe PostsController, type: :controller do
 		end
 	end
 
+	describe "posts#show action" do
+		it "should successfully show the page if the post if found" do
+			post = FactoryGirl.create(:post)
+			get :show, id: post.id
+			expect(response).to have_http_status(:success)
+		end
+		it "should return a 404 error if the post is not found" do
+			get :show, id: 'TACOCAT'
+			expect(response).to have_http_status(:not_found)
+		end
+	end
+
 end
