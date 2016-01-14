@@ -44,6 +44,14 @@ class PostsController < ApplicationController
 	  end
 	end
 
+	def destroy
+		@post = Post.find_by_id(params[:id])
+		return render_not_found if @post.blank?
+
+		@post.destroy
+		redirect_to root_path
+	end
+
 	private
 
 	def post_params

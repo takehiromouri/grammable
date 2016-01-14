@@ -2,6 +2,21 @@ require 'rails_helper'
 
 RSpec.describe PostsController, type: :controller do
 
+	describe "posts#destroy" do
+    it "should allow a user to destroy posts" do
+      p = FactoryGirl.create(:post)
+      delete :destroy, id: p.id
+      expect(response).to redirect_to root_path
+      p = Post.find_by_id(p.id)
+      expect(p).to eq nil
+    end
+
+    it "should return a 404 message if we cannot find a post with the id that is specified" do
+      delete :destroy, id: 'SPACEDUCK'
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
 	describe "posts#update" do
     it "should allow users to successfully update posts" do
 		  p = FactoryGirl.create(:post, :message => "Initial Value")
