@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
 	before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 	def index
-
+		@posts = Post.all
 	end
 
 	def new
@@ -34,7 +34,7 @@ class PostsController < ApplicationController
 	  @post = Post.find_by_id(params[:id])
 	  return render_not_found if @post.blank?
 	  return render_not_found(:forbidden) if @post.user != current_user
-	  
+
 	  @post.update_attributes(post_params)
 	  
 	  if @post.valid?
@@ -55,7 +55,7 @@ class PostsController < ApplicationController
 	private
 
 	def post_params
-		params.require(:post).permit(:message)
+		params.require(:post).permit(:message, :picture)
 	end
 
 	def render_not_found(status=:not_found)
