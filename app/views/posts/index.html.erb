@@ -1,8 +1,39 @@
 <h1>Posts!</h1>
 
-<% @posts.each do |post| %>
-<div>
-  <%= post.message %>
-  <%= image_tag post.picture %>
+<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+  <% @posts.each do |post| %>
+  <div class="card">
+    <div class="handle"><%= post.user.email %></div>
+    <%= image_tag post.picture, :class => 'img-responsive' %>
+    <p>
+      <%= post.message %>
+    </p>
+
+    <div class="post-actions pull-right">
+      <% if current_user && current_user == post.user %>
+        <%= link_to 'Edit', edit_post_path(post) %>
+        <%= link_to 'Destroy', post_path(post), method: :delete, data: {confirm: 'Are you sure?'} %>
+      <% end %>
+    </div>
+    <br class="clear-fix" />
+    <div class="comments">
+      <h3>Comments</h3>
+      <% post.comments.each do |comment| %>
+        <div class="comment">
+          <span class="comment_handle">
+            <%= comment.user.email %>
+          </span>
+          
+          <%= comment.message %>
+        </div>
+      <% end %>
+      <h4>Add a comment</h4>
+      <%= simple_form_for Comment.new, :url => post_comments_path(post) do |f| %>
+        <%= f.input :message %>
+        <%= f.submit 'Add Comment', class: 'my-btn' %>
+      <% end %>
+    </div>
+    
+  </div>
+  <% end %>
 </div>
-<% end %>
