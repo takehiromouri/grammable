@@ -1,0 +1,6 @@
+<h1>Edit</h1>
+
+<%= simple_form_for @post, method: :patch do |f| %>
+	<%= f.input :message %>
+	<%= f.submit 'Post!' %>
+<% end %>

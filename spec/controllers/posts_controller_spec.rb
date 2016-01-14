@@ -1,6 +1,56 @@
 require 'rails_helper'
 
 RSpec.describe PostsController, type: :controller do
+
+	describe "posts#update" do
+    it "should allow users to successfully update posts" do
+		  p = FactoryGirl.create(:post, :message => "Initial Value")
+		  patch :update, :id => p.id, :post => { :message => 'Changed' }
+		  expect(response).to redirect_to root_path
+		  p.reload
+		  expect(p.message).to eq "Changed"
+		end
+
+    it "should have http 404 error if the post cannot be found" do
+		  patch :update, :id => "YOLOSWAG", :post => {:message => 'Changed'}
+		  expect(response).to have_http_status(:not_found)
+		end
+
+
+    it "should render the edit form with an http status of unprocessable_entity" do
+		  p = FactoryGirl.create(:post, :message => "Initial Value")
+		  patch :update, :id => p.id, :post => { :message => '' }
+		  expect(response).to have_http_status(:unprocessable_entity)
+		  p.reload
+		  expect(p.message).to eq "Initial Value"
+		end
+  end
+
+	describe "posts#edit" do
+    it "should successfully show the edit form if the post is found" do
+      post = FactoryGirl.create(:post)
+      get :edit, id: post.id
+      expect(response).to have_http_status(:success)
+    end
+    
+    it "should return a 404 error message if the post is not found" do
+      get :edit, id: 'LOL'
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+	describe "posts#show action" do
+		it "should successfully show the page if the post if found" do
+			post = FactoryGirl.create(:post)
+			get :show, id: post.id
+			expect(response).to have_http_status(:success)
+		end
+		it "should return a 404 error if the post is not found" do
+			get :show, id: 'TACOCAT'
+			expect(response).to have_http_status(:not_found)
+		end
+	end
+
 	describe "posts#index action" do
 		it "should succesfully show the page" do
 			get	:index
@@ -44,16 +94,6 @@ RSpec.describe PostsController, type: :controller do
 		end
 	end
 
-	describe "posts#show action" do
-		it "should successfully show the page if the post if found" do
-			post = FactoryGirl.create(:post)
-			get :show, id: post.id
-			expect(response).to have_http_status(:success)
-		end
-		it "should return a 404 error if the post is not found" do
-			get :show, id: 'TACOCAT'
-			expect(response).to have_http_status(:not_found)
-		end
-	end
+
 
 end
