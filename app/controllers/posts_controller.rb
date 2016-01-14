@@ -49,4 +49,8 @@ class PostsController < ApplicationController
 	def post_params
 		params.require(:post).permit(:message)
 	end
+
+	def render_not_found
+    render :text => "Not Found :(", :status => :not_found
+  end
 end
