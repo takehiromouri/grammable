@@ -14,6 +14,8 @@ end
 RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include Devise::TestHelpers, type: :view
+  include ActionDispatch::TestProcess
+  
 end
 # Add additional requires below this line. Rails is not loaded until this point!
 

@@ -144,9 +144,13 @@ RSpec.describe PostsController, type: :controller do
 			expect(response).to redirect_to new_user_session_path
 		end
 		it "should successfully create a new post in our database" do
+			
 			user = FactoryGirl.create(:user)
 			sign_in user
-			post :create, post: {message: "Hello!"}
+			post :create, :post => {
+		    :message => 'Hello!',
+		    :picture => fixture_file_upload("/picture.png", 'image/png')
+		  }
 			expect(response).to redirect_to root_path
 			post = Post.last
 			expect(post.message).to eq("Hello!")
